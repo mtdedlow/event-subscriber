@@ -1,0 +1,54 @@
+
+plugins {
+    id 'java'
+    id 'application'
+}
+
+application {
+    mainClass = 'Program'
+}
+
+version = '1.0'
+
+jar {
+    manifest {
+        attributes(
+            'Implementation-Title': 'Event Subscriber',
+            'Implementation-Version': archiveVersion,
+            'Main-Class': application.mainClass
+        )
+    }
+    archiveBaseName = 'EventSubscriber'
+}
+
+run {
+    standardInput = System.in
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://clojars.org/repo'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'org.java-websocket:Java-WebSocket:1.5.3'
+    implementation 'com.google.http-client:google-http-client:1.43.3'
+    implementation 'com.google.http-client:google-http-client-jackson2:1.43.3'
+    implementation 'com.google.http-client:google-http-client-gson:1.43.3'
+}
+
+compileJava {
+    options.compilerArgs << "-Xlint:deprecation"
+}
+
+tasks.withType(JavaExec) {
+    jvmArgs = [
+        "-Djavax.net.ssl.trustStore=./truststore.jks",
+        "-Djavax.net.ssl.trustStorePassword=password"
+    ]
+}
+
